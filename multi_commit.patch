@@ -1,0 +1,65 @@
+From 9fafd385805f644f5feb855547908863f794e257 Mon Sep 17 00:00:00 2001
+From: Luke Howard <lhhoward.125@gmail.com>
+Date: Wed, 2 Oct 2024 11:48:07 -0400
+Subject: [PATCH 1/2] Update client3.py
+
+---
+ client3.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/client3.py b/client3.py
+index 3fc09b7..818d23f 100644
+--- a/client3.py
++++ b/client3.py
+@@ -35,7 +35,7 @@ def getDataPoint(quote):
+     stock = quote['stock']
+     bid_price = float(quote['top_bid']['price'])
+     ask_price = float(quote['top_ask']['price'])
+-    price = bid_price
++    price = (bid_price+ask_price)/2
+     return stock, bid_price, ask_price, price
+ 
+ 
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 85d2bdfd799a9a1caf845189d157f43e23738c39 Mon Sep 17 00:00:00 2001
+From: Luke Howard <lhhoward.125@gmail.com>
+Date: Wed, 2 Oct 2024 11:49:57 -0400
+Subject: [PATCH 2/2] Update client3.py
+
+---
+ client3.py | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/client3.py b/client3.py
+index 818d23f..0bca790 100644
+--- a/client3.py
++++ b/client3.py
+@@ -42,7 +42,9 @@ def getDataPoint(quote):
+ def getRatio(price_a, price_b):
+     """ Get ratio of price_a and price_b """
+     """ ------------- Update this function ------------- """
+-    return 1
++    if (price_b==0):
++        return
++    return price_a/price_b
+ 
+ 
+ # Main
+@@ -52,8 +54,10 @@ if __name__ == "__main__":
+         quotes = json.loads(urllib.request.urlopen(QUERY.format(random.random())).read())
+ 
+         """ ----------- Update to get the ratio --------------- """
++        prices={}
+         for quote in quotes:
+             stock, bid_price, ask_price, price = getDataPoint(quote)
++            prices[stock]= price
+             print("Quoted %s at (bid:%s, ask:%s, price:%s)" % (stock, bid_price, ask_price, price))
+ 
+-        print("Ratio %s" % getRatio(price, price))
++        print("Ratio %s" % getRatio(prices["ABC"], prices["DEF"]))
+-- 
+2.39.5 (Apple Git-154)
+
